@@ -18,7 +18,6 @@ public interface PayIdAddressDetails {
 
   String address();
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) // or JsonSerialize.Inclusion.NON_EMPTY
   Optional<String> tag();
 
 }
