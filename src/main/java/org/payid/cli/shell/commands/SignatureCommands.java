@@ -93,7 +93,7 @@ public class SignatureCommands extends AbstractCommands {
               .keyID(ecJWK.getKeyID())
               .customParam("name", IDENTITY_KEY)
               .type(JOSEObjectType.JOSE_JSON)
-              .customParam("b64", false)
+              .base64URLEncodePayload(false)
               .criticalParams(Sets.newHashSet("b64"))
               .jwk(ecJWK.toPublicJWK())
               .build(),
