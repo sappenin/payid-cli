@@ -129,7 +129,7 @@ public class PayIdCommands extends AbstractCommands {
     final String addressKey = paymentNetwork + "-" + addressDetailsType + "-" + networkEnvironment;
     this.addresses.put(addressKey, address);
     blankLineLogger
-      .info("Added PayID Address Mapping:\n\n{}", ObjectMapperFactory.objectMapper().writeValueAsString(address));
+      .info("Added PayID Address Mapping:\n\n{}", ObjectMapperFactory.objectMapperForDisplay().writeValueAsString(address));
   }
 
   /**
@@ -174,7 +174,7 @@ public class PayIdCommands extends AbstractCommands {
       .addresses(this.addresses.values())
       .build();
 
-    return ObjectMapperFactory.objectMapper().writeValueAsString(payIdPayload);
+    return ObjectMapperFactory.objectMapperForDisplay().writeValueAsString(payIdPayload);
   }
 
   /**

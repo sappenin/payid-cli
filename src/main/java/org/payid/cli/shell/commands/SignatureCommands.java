@@ -1,6 +1,7 @@
 package org.payid.cli.shell.commands;
 
-import static org.payid.cli.ObjectMapperFactory.objectMapper;
+import static org.payid.cli.ObjectMapperFactory.objectMapperCanonical;
+import static org.payid.cli.ObjectMapperFactory.objectMapperForDisplay;
 import static org.payid.cli.ObjectMapperFactory.prettyJson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -83,7 +84,7 @@ public class SignatureCommands extends AbstractCommands {
           // IdentityKey Sign
           ///////////////////
 
-          final String payloadAsJsonString = objectMapper().writeValueAsString(verifiedPayload);
+          final String payloadAsJsonString = objectMapperCanonical().writeValueAsString(verifiedPayload);
 
           // Create the EC signer
           JWSSigner signer = new ECDSASigner(ecJWK);
@@ -151,7 +152,7 @@ public class SignatureCommands extends AbstractCommands {
     this.payIdPayload = payIdPayload;
 
     // Output the V.PayID JWS. Do 'prettyPrint' so that the JWK is indented properly.
-    return prettyJson(objectMapper().writeValueAsString(payIdPayload));
+    return prettyJson(objectMapperForDisplay().writeValueAsString(payIdPayload));
   }
 
   /**

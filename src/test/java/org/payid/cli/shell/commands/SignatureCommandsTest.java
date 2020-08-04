@@ -55,7 +55,7 @@ public class SignatureCommandsTest {
 
   @Test
   public void signJwsWithNoAddresses() throws JsonProcessingException, JOSEException {
-    PayIdPayload signedJws = ObjectMapperFactory.objectMapper()
+    PayIdPayload signedJws = ObjectMapperFactory.objectMapperForDisplay()
       .readValue(signatureCommands.signJws(), PayIdPayload.class);
 
     assertThat(signedJws.payId()).isEqualTo("alice$xpring.money");
@@ -73,7 +73,7 @@ public class SignatureCommandsTest {
         .build())
       .build());
 
-    PayIdPayload signedJws = ObjectMapperFactory.objectMapper()
+    PayIdPayload signedJws = ObjectMapperFactory.objectMapperForDisplay()
       .readValue(signatureCommands.signJws(), PayIdPayload.class);
 
     assertThat(signedJws.payId()).isEqualTo("alice$xpring.money");
@@ -83,7 +83,7 @@ public class SignatureCommandsTest {
     VerifiedAddress signedAddress = signedJws.verifiedAddresses().stream().findFirst().get();
 
     VerifiedAddressPayload verifiedAddressPayload =
-      ObjectMapperFactory.objectMapper().readValue(signedAddress.payload(), VerifiedAddressPayload.class);
+      ObjectMapperFactory.objectMapperForDisplay().readValue(signedAddress.payload(), VerifiedAddressPayload.class);
 
     assertThat(verifiedAddressPayload.payId()).isEqualTo("alice$xpring.money");
 
@@ -105,7 +105,7 @@ public class SignatureCommandsTest {
     );
 
     String json = new String(jsonBytes);
-    JsonNode jsonNode = ObjectMapperFactory.objectMapper().readValue(json, JsonNode.class);
+    JsonNode jsonNode = ObjectMapperFactory.objectMapperForDisplay().readValue(json, JsonNode.class);
 
     assertThat(jsonNode.get("name").asText()).isEqualTo("identityKey");
     assertThat(jsonNode.get("typ").asText()).isEqualTo("JOSE+JSON");
