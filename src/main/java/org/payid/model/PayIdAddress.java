@@ -22,7 +22,7 @@ public interface PayIdAddress {
 
   @Default
   default String environment() {
-    return "TESTNET";
+    return "MAINNET";
   }
 
   @Default

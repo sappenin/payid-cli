@@ -2,7 +2,6 @@ package org.payid.cli.shell.commands;
 
 import static org.payid.cli.ObjectMapperFactory.objectMapper;
 import static org.payid.cli.ObjectMapperFactory.prettyJson;
-import static org.payid.model.VerifiedProtected.IDENTITY_KEY;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Lists;
@@ -17,17 +16,10 @@ import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.ECDSASigner;
 import com.nimbusds.jose.crypto.ECDSAVerifier;
-import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.ECKey;
-import com.nimbusds.jose.jwk.KeyUse;
-import com.nimbusds.jose.jwk.gen.ECKeyGenerator;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.payid.model.PayIdPayload;
 import org.payid.model.VerifiedAddress;
-import org.payid.model.VerifiedPayload;
-import org.payid.model.VerifiedProtected;
+import org.payid.model.VerifiedAddressPayload;
 import org.payid.model.VerifiedSignature;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellCommandGroup;
@@ -37,7 +29,6 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -46,6 +37,10 @@ import java.util.stream.Collectors;
 @ShellComponent
 @ShellCommandGroup("Verifiable PayID")
 public class SignatureCommands extends AbstractCommands {
+
+  public static final String IDENTITY_KEY = "identityKey";
+  public static final String SERVER_KEY = "serverKey";
+  public static final String PROOF_OF_CONTROL_KEY = "proofOfControlKey";
 
   private Optional<String> identityKeyAlias;
   private Optional<String> serverKeyAlias;
@@ -59,14 +54,12 @@ public class SignatureCommands extends AbstractCommands {
 
   /**
    * Encrypt a plaintext value using the selected key information.
+   *
+   * @return
    */
   @ShellMethod(value = "Sign a PayID that conforms to Verifiable PayID", key = {"s", "sign"})
   String signJws() throws JOSEException, JsonProcessingException {
-    ECKey ecJWK = new ECKeyGenerator(Curve.SECP256K1)
-      .keyUse(KeyUse.SIGNATURE)
-      .keyID(UUID.randomUUID().toString())
-      .algorithm(JWSAlgorithm.ES256K)
-      .generate();
+    final ECKey ecJWK = getIdentityKey();
 
     // For each address in Addresses, we need to construct a VerifiedPayload
 
@@ -74,7 +67,7 @@ public class SignatureCommands extends AbstractCommands {
       ///////////
       // Turn each address into a VerifiedPayload
       ///////////
-      .map(address -> VerifiedPayload.builder()
+      .map(address -> VerifiedAddressPayload.builder()
         .payId(this.payId)
         .payIdAddress(address)
         .build()
@@ -90,14 +83,7 @@ public class SignatureCommands extends AbstractCommands {
           // IdentityKey Sign
           ///////////////////
 
-          // TODO: Validate with https://tools.ietf.org/html/rfc7797#section-8
-          // The actual bytes should not be normalized. However, when serializing these two should be normalized.
-          String payloadAsJsonString = objectMapper().writeValueAsString(verifiedPayload);
-          //.replace(".", "\\.")
-          //.replace("\"", "\\");
-
-          JSONParser jsonParser = new JSONParser();
-          JSONObject payloadJsonObject = (JSONObject) jsonParser.parse(payloadAsJsonString);
+          final String payloadAsJsonString = objectMapper().writeValueAsString(verifiedPayload);
 
           // Create the EC signer
           JWSSigner signer = new ECDSASigner(ecJWK);
@@ -111,31 +97,24 @@ public class SignatureCommands extends AbstractCommands {
               .criticalParams(Sets.newHashSet("b64"))
               .jwk(ecJWK.toPublicJWK())
               .build(),
-            new Payload(payloadJsonObject)
+            new Payload(payloadAsJsonString)
           );
 
           // Compute the EC signature
           jwsObject.sign(signer);
 
           // The recipient creates a verifier with the public EC key
-          JWSVerifier verifier = new ECDSAVerifier(ecJWK.toECPublicKey());
+          JWSVerifier verifier = new ECDSAVerifier(ecJWK.toECPublicKey(), Sets.newHashSet("b64"));
 
           // Verify the EC signature
           assert jwsObject.verify(verifier);
-          assert jwsObject.getPayload().toString().equals(payloadJsonObject.toJSONString());
+          //assert jwsObject.getPayload().toString().equals(payloadJsonObject.toJSONString());
 
           VerifiedSignature identityKeyVerifiedSignature = VerifiedSignature.builder()
             .signature(jwsObject.getSignature().toString())
-            .verifiedProtected(VerifiedProtected.builder()
-              .name(IDENTITY_KEY)
-              .algorithm(jwsObject.getHeader().getAlgorithm().getName())
-              .type(jwsObject.getHeader().getType().getType())
-              .criticalClaims(jwsObject.getHeader().getCriticalParams().toArray(new String[0]))
-              .base64(Boolean.getBoolean(jwsObject.getHeader().getCustomParam("b64").toString()))
-              .jwk(jwsObject.getHeader().getJWK())
-              .build()
-            )
+            .protectedHeaders(jwsObject.getHeader().toBase64URL().toString())
             .build();
+
           ///////////////////
           // ServerKey Sign
           ///////////////////
@@ -149,13 +128,14 @@ public class SignatureCommands extends AbstractCommands {
           // Coming Soon
 
           return VerifiedAddress.builder()
-            .payload(verifiedPayload)
+            .payload(payloadAsJsonString)
             .signatures(Lists.newArrayList(
               identityKeyVerifiedSignature
               // TODO: Server and POC sigs here.
             ))
+            .signedJwsObject(jwsObject)
             .build();
-        } catch (JOSEException | JsonProcessingException | ParseException e) {
+        } catch (JOSEException | JsonProcessingException e) {
           throw new RuntimeException(e.getMessage(), e);
         }
 
@@ -167,6 +147,8 @@ public class SignatureCommands extends AbstractCommands {
       //.addresses()
       .verifiedAddresses(verifiedAddresses)
       .build();
+
+    this.payIdPayload = payIdPayload;
 
     // Output the V.PayID JWS. Do 'prettyPrint' so that the JWK is indented properly.
     return prettyJson(objectMapper().writeValueAsString(payIdPayload));
@@ -207,5 +189,4 @@ public class SignatureCommands extends AbstractCommands {
     this.identityKeyAlias = Optional.of(identityKeyAlias);
     return String.format("PayID payloads will be signed using the Identity Key: `%s`", identityKeyAlias);
   }
-
 }

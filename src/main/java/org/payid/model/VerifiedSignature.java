@@ -15,8 +15,11 @@ public interface VerifiedSignature {
     return ImmutableVerifiedSignature.builder();
   }
 
+  /**
+   * Base64-encoded protected headers.
+   */
   @JsonProperty("protected")
-  VerifiedProtected verifiedProtected();
+  String protectedHeaders();
 
   /**
    * Signature as Base64.
