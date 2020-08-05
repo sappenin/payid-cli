@@ -437,16 +437,6 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
-            <!--      <dependency>-->
-            <!--        <groupId>org.springframework.cloud</groupId>-->
-            <!--        <artifactId>spring-cloud-gcp-dependencies</artifactId>-->
-            <!--        <type>pom</type>-->
-            <!--        &lt;!&ndash; this should match version of spring-cloud-gcp-dependencies that gets inherited in connector-parent &ndash;&gt;-->
-            <!--        &lt;!&ndash; this command, run from the connector-parent directory, will show you what it is inheriting: &ndash;&gt;-->
-            <!--        &lt;!&ndash; mvn help:effective-pom -Dverbose | grep spring-cloud-gcp-dependencies | head -1 &ndash;&gt;-->
-            <!--        <version>1.2.1.RELEASE</version>-->
-            <!--        <scope>import</scope>-->
-            <!--      </dependency>-->
             <dependency>
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>

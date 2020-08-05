@@ -51,74 +51,53 @@ Here is an example of a PayID payload that can be emitted from this utility:
 
 ```
 {
-  "payId" : "alice$xpring.money",
-  "addresses" : [ ],
-  "verifiedAddresses" : [ {
-    "signatures" : [ {
-      "protected" : {
-        "jwk" : {
-          "kty" : "EC",
-          "use" : "sig",
-          "crv" : "secp256k1",
-          "kid" : "8c36aeec-7689-43c9-8b95-92c39d04a8d0",
-          "x" : "Dq4ZMi4DfituAlFH_SYKsWh9Z-Aq5GricISkQxAPUtw",
-          "y" : "VjYxAwD6KOOwDTz1BVmiBPHGEmm6clO4sGqf1YW5yac",
-          "alg" : "ES256K"
-        },
-        "name" : "identityKey",
-        "alg" : "ES256K",
-        "typ" : "JOSE+JSON",
-        "crit" : [ "b64" ],
-        "b64" : false
-      },
-      "signature" : "00SnJc4O8Mx9gaU4sUmRhVl3q2XqhW1NyPjo0KMKFz1DCYie2cD0b_CL8xbi9pqSFHK54d-uoOSOPpBesjxK-g"
-    } ],
-    "payload" : {
-      "payId" : "alice$xpring.money",
-      "payIdAddress" : {
-        "paymentNetwork" : "XRPL",
-        "environment" : "MAINNET",
-        "addressDetailsType" : "CryptoAddressDetails",
-        "addressDetails" : {
-          "address" : "rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg",
-          "tag" : "722714325"
+  "payId": "pay$payid.fluid.money",
+  "addresses": [],
+  "verifiedAddresses": [
+    {
+      "payId": "pay$payid.fluid.money",
+      "addresses": [
+      ],
+      "verifiedAddresses": [
+        {
+          "signatures": [
+            {
+              "protected": "eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJraWQiOiJlMTViNmM5Zi0yZWEwLTQ1ZTctYWYxNi01ODk3M2E1MDM4ZmEiLCJuYW1lIjoiaWRlbnRpdHlLZXkiLCJ0eXAiOiJKT1NFK0pTT04iLCJhbGciOiJFUzI1NksiLCJqd2siOnsia3R5IjoiRUMiLCJ1c2UiOiJzaWciLCJjcnYiOiJzZWNwMjU2azEiLCJraWQiOiJlMTViNmM5Zi0yZWEwLTQ1ZTctYWYxNi01ODk3M2E1MDM4ZmEiLCJ4IjoiXzE5dFJ2dDQ4UWltbFZaS25DUzE5TFJBeUNPWmNndVAxXzhaQkJKQWMwQSIsInkiOiJJNW9wemlQQ3cxblB3SnQxRXhDbEhfa1o2YUlrQlk0bUtfTnBEeEV5MHEwIiwiYWxnIjoiRVMyNTZLIn19",
+              "signature": "p-Xg_8KJIgiqAUA99Jd_VM8PVwpbNhj3vCC5DX8Xr2gatl91pCndxZMKBdsOhL95OuHHUomcj69zl2B9_vdf6A"
+            }
+          ],
+          "payload": "{\"payId\":\"pay$payid.fluid.money\",\"payIdAddress\":{\"paymentNetwork\":\"XRPL\",\"environment\":\"TESTNET\",\"addressDetailsType\":\"CryptoAddressDetails\",\"addressDetails\":{\"address\":\"rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg\",\"tag\":\"722714325\"}}}"
         }
-      }
-    }
-  }, {
-    "signatures" : [ {
-      "protected" : {
-        "jwk" : {
-          "kty" : "EC",
-          "use" : "sig",
-          "crv" : "secp256k1",
-          "kid" : "8c36aeec-7689-43c9-8b95-92c39d04a8d0",
-          "x" : "Dq4ZMi4DfituAlFH_SYKsWh9Z-Aq5GricISkQxAPUtw",
-          "y" : "VjYxAwD6KOOwDTz1BVmiBPHGEmm6clO4sGqf1YW5yac",
-          "alg" : "ES256K"
-        },
-        "name" : "identityKey",
-        "alg" : "ES256K",
-        "typ" : "JOSE+JSON",
-        "crit" : [ "b64" ],
-        "b64" : false
-      },
-      "signature" : "u7rZb9UjqD_go_GG_bvdyx07wBrjgVMWBPdqCsXvBuLmDiqC1N2MycxBO3RUfoUh0FW8bn8buIrXXXXRSy-nQg"
-    } ],
-    "payload" : {
-      "payId" : "alice$xpring.money",
-      "payIdAddress" : {
-        "paymentNetwork" : "XRPL",
-        "environment" : "TESTNET",
-        "addressDetailsType" : "CryptoAddressDetails",
-        "addressDetails" : {
-          "address" : "rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg",
-          "tag" : "722714325"
+      ]
+    },
+    {
+      "payId": "pay$payid.fluid.money",
+      "addresses": [
+      ],
+      "verifiedAddresses": [
+        {
+          "signatures": [
+            {
+              "protected": "eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJraWQiOiJlMTViNmM5Zi0yZWEwLTQ1ZTctYWYxNi01ODk3M2E1MDM4ZmEiLCJuYW1lIjoiaWRlbnRpdHlLZXkiLCJ0eXAiOiJKT1NFK0pTT04iLCJhbGciOiJFUzI1NksiLCJqd2siOnsia3R5IjoiRUMiLCJ1c2UiOiJzaWciLCJjcnYiOiJzZWNwMjU2azEiLCJraWQiOiJlMTViNmM5Zi0yZWEwLTQ1ZTctYWYxNi01ODk3M2E1MDM4ZmEiLCJ4IjoiXzE5dFJ2dDQ4UWltbFZaS25DUzE5TFJBeUNPWmNndVAxXzhaQkJKQWMwQSIsInkiOiJJNW9wemlQQ3cxblB3SnQxRXhDbEhfa1o2YUlrQlk0bUtfTnBEeEV5MHEwIiwiYWxnIjoiRVMyNTZLIn19",
+              "signature": "tcK8zdtIcDHVyz1GKj2SRWTD862KcDsjsNM1d9SFDPp4wuDoe0dBja80KOzpMijXcxdKjoA7aqiYQqbm1hMCIw"
+            }
+          ],
+          "payload": "{\"payId\":\"pay$payid.fluid.money\",\"payIdAddress\":{\"paymentNetwork\":\"XRPL\",\"environment\":\"TESTNET\",\"addressDetailsType\":\"CryptoAddressDetails\",\"addressDetails\":{\"address\":\"rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg\",\"tag\":\"722714325\"}}}"
         }
-      }
+      ]
     }
-  } ]
+  ]
 }
 ```
 
+# Docker
+
+## Build a Docker Image
+To create a docker image, execute the following commands:
+
+`> docker build -t payid/payid-cli .`
+
+## Run the Image
+
+`> docker run -it -p 5432:5432 payid/payid-cli`
 
