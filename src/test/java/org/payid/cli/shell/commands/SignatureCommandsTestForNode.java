@@ -29,13 +29,6 @@ public class SignatureCommandsTestForNode {
     + "\"kty\":\"EC\""
     + "}";
 
-//  private static final String JS_DETACHED_PAYLOAD =
-//    "{\\\"payId\\\":\\\"alice$payid.example\\\","
-//      + "\\\"payIdAddress\\\":{\\\"environment\\\":\\\"TESTNET\\\","
-//      + "\\\"paymentNetwork\\\":\\\"XRPL\\\","
-//      + "\\\"addressDetailsType\\\":\\\"CryptoAddressDetails\\\","
-//      + "\\\"addressDetails\\\":{\\\"address\\\":\\\"rP3t3JStqWPYd8H88WfBYh3v84qqYzbHQ6\\\"}}}";
-
   private static final String JS_DETACHED_PAYLOAD =
     "{\"payId\":\"alice$payid.example\","
       + "\"payIdAddress\":{\"environment\":\"TESTNET\","
